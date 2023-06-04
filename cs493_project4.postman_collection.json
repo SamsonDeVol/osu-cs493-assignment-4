@@ -1,0 +1,418 @@
+{
+	"info": {
+		"_postman_id": "8b13d71c-5ea8-4690-8de9-025bf97970b1",
+		"name": "cs493_project4",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25734158"
+	},
+	"item": [
+		{
+			"name": "Add a new photo jpg",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "kitty.jpg"
+						},
+						{
+							"key": "data",
+							"value": "{\n\"userId\": \"1\",\n\"businessId\": 10,\n\"caption\": \"heeheehaha\"\n}",
+							"contentType": "application/json",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/photos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"photos"
+					]
+				},
+				"description": "Creates a new photo with specified data and adds it to the application's database.\n"
+			},
+			"response": [
+				{
+					"name": "The request body was either not present or did not contain all of the required fields.",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userid\": 7,\n    \"businessid\": 3,\n    \"caption\": \"Kale!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/photos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"photos"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"error\": \"<string>\"\n}"
+				},
+				{
+					"name": "New photo successfully added",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userid\": 7,\n    \"businessid\": 3,\n    \"caption\": \"Kale!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/photos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"photos"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"id\": 10\n}"
+				}
+			]
+		},
+		{
+			"name": "Add a new photo png",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "kitty.jpg"
+						},
+						{
+							"key": "data",
+							"value": "{\n\"userId\": \"1\",\n\"businessId\": 10,\n\"caption\": \"heeheehaha\"\n}",
+							"contentType": "application/json",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/photos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"photos"
+					]
+				},
+				"description": "Creates a new photo with specified data and adds it to the application's database.\n"
+			},
+			"response": [
+				{
+					"name": "The request body was either not present or did not contain all of the required fields.",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userid\": 7,\n    \"businessid\": 3,\n    \"caption\": \"Kale!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/photos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"photos"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"error\": \"<string>\"\n}"
+				},
+				{
+					"name": "New photo successfully added",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userid\": 7,\n    \"businessid\": 3,\n    \"caption\": \"Kale!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/photos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"photos"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"id\": 10\n}"
+				}
+			]
+		},
+		{
+			"name": "Add a new photo heic",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "kitty.jpg"
+						},
+						{
+							"key": "data",
+							"value": "{\n\"userId\": \"1\",\n\"businessId\": 10,\n\"caption\": \"heeheehaha\"\n}",
+							"contentType": "application/json",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/photos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"photos"
+					]
+				},
+				"description": "Creates a new photo with specified data and adds it to the application's database.\n"
+			},
+			"response": [
+				{
+					"name": "The request body was either not present or did not contain all of the required fields.",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userid\": 7,\n    \"businessid\": 3,\n    \"caption\": \"Kale!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/photos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"photos"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"error\": \"<string>\"\n}"
+				},
+				{
+					"name": "New photo successfully added",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userid\": 7,\n    \"businessid\": 3,\n    \"caption\": \"Kale!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/photos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"photos"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"id\": 10\n}"
+				}
+			]
+		},
+		{
+			"name": "GET photo with id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/photos/647cfc19f916adadbe9c064d",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"photos",
+						"647cfc19f916adadbe9c064d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get photo download with id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/media/photos/647cfc19f916adadbe9c064d.jpg",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"media",
+						"photos",
+						"647cfc19f916adadbe9c064d.jpg"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get thumb download with id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/photos/media/thumbs/647a451987c6857a9d14293b",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"photos",
+						"media",
+						"thumbs",
+						"647a451987c6857a9d14293b"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
