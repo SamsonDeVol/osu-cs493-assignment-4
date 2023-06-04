@@ -3,38 +3,42 @@
  */
 
 const { Router } = require('express')
-const { getChannel, connectToRabbitMQ } = require('../lib/rabbitmq')
+const { getChannel } = require('../lib/rabbitmq')
 const { validateAgainstSchema } = require('../lib/validation')
 const {
   PhotoSchema,
+  photoTypes,
   getPhotoInfoById,
-  savePhotoInfo,
   savePhotoFile,
   removeUploadedFile,
-  getPhotoDownloadStreamById,
-  getPhotoById,
-  getThumbDownloadStreamById,
-  getThumbInfoById
 } = require('../models/photo')
 
 const router = Router()
-
-const photoTypes = {
-  "image/jpeg": "jpg",
-  "image/png": "png",
-}
-
+const crypto = require("node:crypto")
 const multer = require('multer');
-const upload = multer({ dest: `${__dirname}/../uploads` });
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: `${__dirname}/../uploads`,
+    filename: (req, file, callback) => {
+        const filename = crypto.pseudoRandomBytes(16).toString("hex")
+        const extension = photoTypes[file.mimetype]
+        callback(null, `${filename}.${extension}`)
+    }
+  }),
+  fileFilter: (req, file, callback) => {
+    callback(null, !!photoTypes[file.mimetype]);
+  }
+});
 
 
 /*
  * POST /photos - Route to create a new photo.
  */
 router.post('/', upload.single('photo'), async (req, res, next) => {
-  // console.log("  -- req.file:", req.file)
+  console.log("  -- req.file:", req.file)
   const body = JSON.parse(req.body.data)
-  // console.log("  -- req.body:", body)
+  console.log("  -- req.body:", body)
 
   if (validateAgainstSchema(body, PhotoSchema) && req.file) {
     try {
@@ -47,7 +51,6 @@ router.post('/', upload.single('photo'), async (req, res, next) => {
 
       const id = await savePhotoFile(photo)
       const channel = getChannel();
-      // console.log("id inserted", id)
       channel.sendToQueue('photos', Buffer.from(id.toString()));
       await removeUploadedFile(photo)
       res.status(200).send({
@@ -65,7 +68,7 @@ router.post('/', upload.single('photo'), async (req, res, next) => {
     }
   } else {
     res.status(400).send({
-      error: "Request body is not a valid photo object with userId"
+      error: "Request body is not a valid photo object, must include a userId, and businessId as well as be valid jpg or png file."
     })
   }
 })
@@ -76,15 +79,16 @@ router.post('/', upload.single('photo'), async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const photo = await getPhotoInfoById(req.params.id)
-    // console.log(" -- photo:", photo)
+    console.log(" -- photo:", photo)
     if (photo) {
       delete photo.path;
       const resBody = {
         _id: photo._id,
-        url: `/photos/media/${photo.filename}`,
+        url: `/media/photos/${photo._id}.${photoTypes[photo.metadata.contentType]}`,
         contentType: photo.metadata.contentType,
         userId: photo.metadata.userId,
-        dimensions: photo.metadata.dimensions
+        thumbId: photo.metadata.thumbId,
+        thumbUrl: `/media/thumbs/${photo._id}.jpg`
       }
       res.status(200).send(resBody)
     } else {
@@ -98,58 +102,5 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-
-router.get('/media/:id', async (req, res, next) => {
-  getPhotoDownloadStreamById(req.params.id)
-  .on('file', (file) => {
-    res.status(200).type(file.metadata.contentType);
-    console.log(file)
-  }).on('error', (err) => {
-    if (err.code === 'ENOENT') {
-      next();
-    } else {
-      next(err);
-    }
-  }).pipe(res);
-})
-
-router.get('/thumbs/:id', async (req, res, next) => {
-  try {
-    const thumb = await getThumbInfoById(req.params.id)
-    // console.log(" -- thumb:", thumb)
-    if (thumb) {
-      delete thumb.path;
-      const resBody = {
-        _id: thumb._id,
-        url: `/photos/media/thumbs/${thumb.filename}`,
-        // contentType: thumb.metadata.contentType,
-        // userId: thumb.metadata.userId,
-        // dimensions: thumb.metadata.dimensions
-      }
-      res.status(200).send(resBody)
-    } else {
-      next()
-    }
-  } catch (err) {
-    console.error(err)
-    res.status(500).send({
-      error: "Unable to fetch photo.  Please try again later."
-    })
-  }
-})
-
-router.get('/media/thumbs/:id', async (req, res, next) => {
-  getThumbDownloadStreamById(req.params.id)
-  .on('file', (file) => {
-    console.log("cont", file)
-    res.status(200).type(file.metadata.contentType);
-  }).on('error', (err) => {
-    if (err.code === 'ENOENT') {
-      next();
-    } else {
-      next(err);
-    }
-  }).pipe(res);
-})
 
 module.exports = router
